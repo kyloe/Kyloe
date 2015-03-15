@@ -400,7 +400,8 @@ sub writeICS
 		print MYFILE " \r\n";
 				
 		print MYFILE "DESCRIPTION: ";
-		print MYFILE $specialDuties->{ $self->{CAL}->{$activityid}->{CODE} }." ";
+		print MYFILE $specialDuties->{ $self->{CAL}->{$activityid}->{CODE} }." "
+			if ( $specialDuties->{ $self->{CAL}->{$activityid}->{CODE} } );
 		print MYFILE " Depart " . $self->{CAL}->{$activityid}->{'DEP'} . " "
 		  if ( $self->{CAL}->{$activityid}->{'DEP'} );
 		print MYFILE " Arrive " . $self->{CAL}->{$activityid}->{'ARR'} . " "
