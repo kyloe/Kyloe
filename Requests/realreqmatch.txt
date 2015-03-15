@@ -1,0 +1,38 @@
+POST https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths HTTP/1.1
+POST https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths HTTP/1.1
+
+Host: raido.loganair.co.uk
+Host: raido.loganair.co.uk
+
+Connection: keep-alive
+Connection: TE, close
+
+Content-Length: 122
+Content-Length: 121
+
+Accept-Encoding: gzip,deflate,sdch
+Accept-Encoding: gzip
+
+
+
+Content-Type: application/json; charset=UTF-8
+Content-Type: application/json; charset=utf-8
+
+
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.57 Safari/537.36
+User-Agent: WWW-Mechanize/1.73
+
+
+{ increaseordecrease: "1", lastmonth: "11_2013", firstmonth: "11_2013", ddlselectehresid: "undefined", iframe: "Iframe0" }
+{ increaseordecrease: "-1", lastmonth: "0_2014", firstmonth: "9_2013", ddlselectehresid: "undefined", iframe: "Iframe0" }
+
+
+Origin: https://raido.loganair.co.uk
+X-Requested-With: XMLHttpRequest
+Referer: https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeID=Iframe0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,ru;q=0.4
+Cookie: ASP.NET_SessionId=nn0selx5qhrggd1zlnrwexaj
+
+
+TE: deflate,gzip;q=0.3

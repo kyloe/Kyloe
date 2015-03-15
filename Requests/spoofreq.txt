@@ -1,0 +1,10 @@
+POST https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths HTTP/1.1
+TE: deflate,gzip;q=0.3
+Connection: TE, close
+Accept-Encoding: gzip
+Host: raido.loganair.co.uk
+User-Agent: WWW-Mechanize/1.73
+Content-Length: 121
+Content-Type: application/json; charset=utf-8
+
+{ increaseordecrease: "-1", lastmonth: "0_2014", firstmonth: "9_2013", ddlselectehresid: "undefined", iframe: "Iframe0" }

@@ -1,0 +1,15 @@
+POST https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths HTTP/1.1
+TE: deflate,gzip;q=0.3
+Connection: keep-alive, TE, close
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Encoding: gzip,deflate,sdch
+Accept-Language: en-GB,en-US;q=0.8,en;q=0.6,ru;q=0.4
+Host: raido.loganair.co.uk
+Referer: https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeID=Iframe0
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.0; en-US; rv:1.4b) Gecko/20030516 Mozilla Firebird/0.6
+Content-Length: 122
+Content-Type: application/json; charset=utf-8
+Origin: https://raido.loganair.co.uk
+X-Requested-With: XMLHttpRequest
+
+{ increaseordecrease: "1", lastmonth: "11_2013", firstmonth: "11_2013", ddlselectehresid: "undefined", iframe: "Iframe0" }
