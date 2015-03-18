@@ -1,13 +1,13 @@
 #!/usr/bin/perl
 package Kyloe::Raido::Connector;
 
+use JSON;
 use CGI;
 use WWW::Mechanize;
 use HTML::TreeBuilder; 
 use HTTP::Cookies;
 use Data::Dumper;
 use Class::Date qw(:errors date localdate gmdate now -DateParse -EnvC);
-use JSON;  
 
 use strict;
 use warnings;
