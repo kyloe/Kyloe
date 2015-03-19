@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package Kyloe::Raido::Connector;
+package Kyloe::Raido::Connector::Logbook;
 use Dancer ':syntax';
 use CGI;
 use WWW::Mechanize;
