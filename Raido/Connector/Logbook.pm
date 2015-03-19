@@ -597,7 +597,7 @@ sub getVoyageIDs()
 		# crew details	
 		
 		my $message = 	$self->{TREE}->look_down('_tag','div','style','width: 98%; margin: 5px;');
-	debug Dumper($message->as_text());
+	#debug Dumper($message->as_text());
 
 		my @summ = $self->{TREE}->look_down('_tag','span','id',qr/CPHcontent_rptTimes_labFlightInfo_\d/);
 		
