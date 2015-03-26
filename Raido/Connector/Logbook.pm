@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 package Kyloe::Raido::Connector::Logbook;
+use parent 'Kyloe::Raido::Connector';
 use Dancer ':syntax';
 use CGI;
 use WWW::Mechanize;
