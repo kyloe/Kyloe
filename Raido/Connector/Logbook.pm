@@ -1032,7 +1032,7 @@ sub parseTable()
 
 	# find table
 	
-		print Dumper($args{TREE});
+	# print Dumper($args{TREE});
 	
 	my @table_arr = $args{TREE}->look_down('_tag','table',@{$args{TABLE_IDENTIFIER}});
 	
