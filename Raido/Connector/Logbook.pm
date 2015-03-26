@@ -19,7 +19,7 @@ use strict;
 use warnings;
 
 
-my $specialDuties = {'DO'=>'Day Off','RDO'=>'Rest Day','LVE'=>'Leave','RST'=>'Rest Day','N/A'=>'Not Available'};
+# my $specialDuties = {'DO'=>'Day Off','RDO'=>'Rest Day','LVE'=>'Leave','RST'=>'Rest Day','N/A'=>'Not Available'};
 
 #-------------------------------------------------------------------------------------
 # Creates a new connector
@@ -27,21 +27,21 @@ my $specialDuties = {'DO'=>'Day Off','RDO'=>'Rest Day','LVE'=>'Leave','RST'=>'Re
 
 
 
-sub new
-{
-	my $class    = shift;    # Determine the class for the oject to create
-
-	my $obj = {
-	};                       # Instantiate a generic empty object
-
-	bless $obj, $class; # 'bless' this new generic object into the desired class
-		 
-	$obj->{MECH} = WWW::Mechanize->new();    # The robot
-	
-	$obj->{MECH}->cookie_jar( HTTP::Cookies->new( file => "/home/ian/cookies.txt") );
-	
-	return $obj;    # Return our newly blessed and loaded object
-}
+#sub new
+#{
+#	my $class    = shift;    # Determine the class for the oject to create
+#
+#	my $obj = {
+#	};                       # Instantiate a generic empty object
+#
+#	bless $obj, $class; # 'bless' this new generic object into the desired class
+#		 
+#	$obj->{MECH} = WWW::Mechanize->new();    # The robot
+#	
+#	$obj->{MECH}->cookie_jar( HTTP::Cookies->new( file => "/home/ian/cookies.txt") );
+#	
+#	return $obj;    # Return our newly blessed and loaded object
+#}
 
 sub login
 {
@@ -154,7 +154,7 @@ sub parseRoster
 
 		my @item = $_->look_down( _tag => 'td' );
 
-		if ($specialDuties->{$item[1]->as_text()})
+		if ($self->{'specialDuties'}->{$item[1]->as_text()})
 		{
 
 # Need to find the date elsewhere
@@ -352,7 +352,7 @@ sub writeICS
 				}
 			else
 				{
-				if(!$specialDuties->{ $self->{CAL}->{$activityid}->{CODE} })
+				if(!$self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
 					{
 					print MYFILE $item . " ";
 					} 
