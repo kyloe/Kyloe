@@ -64,6 +64,8 @@ sub new
 	$obj->{MECH} = WWW::Mechanize->new();    # The robot
 	
 	$obj->{MECH}->cookie_jar( HTTP::Cookies->new( file => "/home/ian/cookies.txt") );
+	
+	$obj->{'specialDuties'} = $specialDuties;
 
 	return $obj;    # Return our newly blessed and loaded object
 }
@@ -169,7 +171,7 @@ sub parseRoster
 
 		my @item = $_->look_down( _tag => 'td' );
 
-		if ($specialDuties->{$item[1]->as_text()})
+		if ($self->{'specialDuties'}->{$item[1]->as_text()})
 		{
 
 			# Need to find the date elsewhere
@@ -363,7 +365,7 @@ sub writeICS
 		# print Dumper($para->{summary});
 		
 		
-		if($specialDuties->{ $self->{CAL}->{$activityid}->{CODE} })
+		if($self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
 			{
 			foreach my $item (@{$para->{altsummary}})
 				{
@@ -400,8 +402,8 @@ sub writeICS
 		print MYFILE " \r\n";
 				
 		print MYFILE "DESCRIPTION: ";
-		print MYFILE $specialDuties->{ $self->{CAL}->{$activityid}->{CODE} }." "
-			if ( $specialDuties->{ $self->{CAL}->{$activityid}->{CODE} } );
+		print MYFILE $self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} }." "
+			if ( $self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} } );
 		print MYFILE " Depart " . $self->{CAL}->{$activityid}->{'DEP'} . " "
 		  if ( $self->{CAL}->{$activityid}->{'DEP'} );
 		print MYFILE " Arrive " . $self->{CAL}->{$activityid}->{'ARR'} . " "
