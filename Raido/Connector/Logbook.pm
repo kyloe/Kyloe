@@ -992,8 +992,7 @@ sub parseResponseToTree
 		$self->{TREE}->parse($self->{MECH}->content());
 				
 		$self->{TREE}->elementify();
-		print $self->{MECH}->content();
-		
+		#print "Elementified\n";
 		}
 	else 	
 		{
