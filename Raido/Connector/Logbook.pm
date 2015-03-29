@@ -71,154 +71,155 @@ sub login
 		}
 }
 
-sub getRoster
-{
-	my $self = shift;
-	$self->{MECH}->get('https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx')
-	  or die "Could not retrieve roster page";
-
-
-	$self->{TREE} = HTML::TreeBuilder->new();
-	$self->{TREE}->parse( $self->{MECH}->content() );
-	$self->{TREE}->elementify();
-	return 1;
-}
-
-sub post_json {
-    my ($mech, $json, $url) = @_;
-    my $req = HTTP::Request->new(POST => $url);
-    $req->content_type('application/json; charset=UTF-8');
-    $req->content($json);
-    return $mech->request($req);
-}
-
-sub getNextMonth
-{
-	my $self = shift;
-	
-	
-	$self->{MECH}->post('https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeid=Iframe0')
-	  					or die "Could not retrieve roster page";
-
-	
-	my $monthURL = 'https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths';
-
-    $self->{MECH}->delete_header('TE');
-    $self->{MECH}->add_header('Content-Type'=>'application/json; charset=UTF-8');
-    $self->{MECH}->delete_header('Cookie2');
-    $self->{MECH}->add_header('Accept-Encoding'=>'gzip,deflate,sdch');
-    $self->{MECH}->agent_alias( 'Windows Mozilla' );
-    $self->{MECH}->add_header('Origin'=>'https://raido.loganair.co.uk');
-    $self->{MECH}->add_header('X-Requested-with'=>'XMLHttpRequest');
-    $self->{MECH}->add_header('Referer'=>'https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeID=Iframe0');
-    $self->{MECH}->add_header('Accept'=>'application/json, text/javascript, */*; q=0.01');
-    $self->{MECH}->add_header('Accept-Language'=>'en-GB,en-US;q=0.8,en;q=0.6,ru;q=0.4');
-
-	my $m = nextMonthKludge();
-
-	my $manString = '{ increaseordecrease: "1", lastmonth: "'.$m.'", firstmonth: "'.$m.'", ddlselectehresid: "undefined", iframe: "Iframe0" }';
-
-    local @LWP::Protocol::http::EXTRA_SOCK_OPTS = (SendTE => 0,KeepAlive => 1);
-    
-    $self->{MECH}->post($monthURL,content=>$manString);
-
-	my $js = JSON->new->utf8->decode($self->{MECH}->content());
-	
-	$self->{'TREE_2'} = HTML::TreeBuilder->new();
-	$self->{'TREE_2'}->parse( $js->{d} ) or die "Failed to parse TREE_2\n";
-#	$self->{'TREE_2'}->utf8_mode();
-#	$self->{'TREE_2'}->parse( $self->{MECH}->content() ) or die "Failed to parse TREE_2\n";
-	$self->{'TREE_2'}->elementify();
-	
-	
-	return 1;
-}
-
-sub parseRoster
-{
-	my $self = shift;
-	my $treeID = shift;
-	
-#	print "Parse $treeID\n";
-	
-	my @entries =
-	  $self->{$treeID}
-	  ->look_down( _tag => "table", activityDetailId => qr/\d\d\d\d\d\d/ );
-
-	my $n = 1;
-
-#print "Found $#entries\n";
-
-	foreach (@entries)
-	{
-
-		$n += 1;
-
-		my @item = $_->look_down( _tag => 'td' );
-
-		if ($self->{'specialDuties'}->{$item[1]->as_text()})
-		{
-
-# Need to find the date elsewhere
-# Need to find div for this id, then find parent then find date in the first child
-			my $friendCell = $self->{$treeID}->look_down(
-				_tag       => "DIV",
-				activityId => $_->{activitydetailid}
-			);
-			my $parentCell    = $friendCell->parent;
-			my $dayNumberCell =
-			  $parentCell->look_down( _tag => "DIV", class => "dayNumberCell" );
-			my $dayNumber = $dayNumberCell->as_text;
-
-			$self->{CAL}->{ $_->{activitydetailid} }->{'Start (UTC)'} =
-			  $self->dateReWrite($dayNumber) . 'T000000';
-
-			$self->{CAL}->{ $_->{activitydetailid} }->{'End (UTC)'} =
-			  $self->dateReWrite($dayNumber) . 'T235900';
-
-		}
-
-		my $i;
-
-		for ( $i = 0 ; $i < $#item ; $i += 2 )
-		{
-			$self->{CAL}->{ $_->{activitydetailid} }->{ $item[$i]->as_text } =
-			  $item[ $i + 1 ]->as_text;
-			 #print 'Adding '. $_->{activitydetailid}.' : '. $item[$i]->as_text .' = '.$item[ $i + 1 ]->as_text."\n";
-		}
-	}
-
-	return 1;
-}
-
-sub dateReWrite
-{
-
-	# translate DD MONTHNAME YYYY
-	# to
-	# YYYYMMDD
-	my $self       = shift;
-	my $dateString = shift;
-
-	my %monthNumbers = (
-		"January"   => "01",
-		"February"  => "02",
-		"March"     => "03",
-		"April"     => "04",
-		"May"       => "05",
-		"June"      => "06",
-		"July"      => "07",
-		"August"    => "08",
-		"September" => "09",
-		"October"   => "10",
-		"November"  => "11",
-		"December"  => "12"
-	);
-
-	my @date = split( / /, $dateString );
-	return $date[2] . $monthNumbers{ $date[1] } . padDate( $date[0] );
-}
-
+# Commented out as part of stripping out this connector and inheriting from parent
+#sub getRoster
+#{
+#	my $self = shift;
+#	$self->{MECH}->get('https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx')
+#	  or die "Could not retrieve roster page";
+#
+#
+#	$self->{TREE} = HTML::TreeBuilder->new();
+#	$self->{TREE}->parse( $self->{MECH}->content() );
+#	$self->{TREE}->elementify();
+#	return 1;
+#}
+#
+#sub post_json {
+#    my ($mech, $json, $url) = @_;
+#    my $req = HTTP::Request->new(POST => $url);
+#    $req->content_type('application/json; charset=UTF-8');
+#    $req->content($json);
+#    return $mech->request($req);
+#}
+#
+#sub getNextMonth
+#{
+#	my $self = shift;
+#	
+#	
+#	$self->{MECH}->post('https://raido.loganair.co.uk/Raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeid=Iframe0')
+#	  					or die "Could not retrieve roster page";
+#
+#	
+#	my $monthURL = 'https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx/ReloadMonths';
+#
+#    $self->{MECH}->delete_header('TE');
+#    $self->{MECH}->add_header('Content-Type'=>'application/json; charset=UTF-8');
+#    $self->{MECH}->delete_header('Cookie2');
+#    $self->{MECH}->add_header('Accept-Encoding'=>'gzip,deflate,sdch');
+#    $self->{MECH}->agent_alias( 'Windows Mozilla' );
+#    $self->{MECH}->add_header('Origin'=>'https://raido.loganair.co.uk');
+#    $self->{MECH}->add_header('X-Requested-with'=>'XMLHttpRequest');
+#    $self->{MECH}->add_header('Referer'=>'https://raido.loganair.co.uk/raido/Dialogues/HumanResources/HumanResourceMyRoster.aspx?iframeID=Iframe0');
+#    $self->{MECH}->add_header('Accept'=>'application/json, text/javascript, */*; q=0.01');
+#    $self->{MECH}->add_header('Accept-Language'=>'en-GB,en-US;q=0.8,en;q=0.6,ru;q=0.4');
+#
+#	my $m = nextMonthKludge();
+#
+#	my $manString = '{ increaseordecrease: "1", lastmonth: "'.$m.'", firstmonth: "'.$m.'", ddlselectehresid: "undefined", iframe: "Iframe0" }';
+#
+#    local @LWP::Protocol::http::EXTRA_SOCK_OPTS = (SendTE => 0,KeepAlive => 1);
+#    
+#    $self->{MECH}->post($monthURL,content=>$manString);
+#
+#	my $js = JSON->new->utf8->decode($self->{MECH}->content());
+#	
+#	$self->{'TREE_2'} = HTML::TreeBuilder->new();
+#	$self->{'TREE_2'}->parse( $js->{d} ) or die "Failed to parse TREE_2\n";
+##	$self->{'TREE_2'}->utf8_mode();
+##	$self->{'TREE_2'}->parse( $self->{MECH}->content() ) or die "Failed to parse TREE_2\n";
+#	$self->{'TREE_2'}->elementify();
+#	
+#	
+#	return 1;
+#}
+#
+#sub parseRoster
+#{
+#	my $self = shift;
+#	my $treeID = shift;
+#	
+##	print "Parse $treeID\n";
+#	
+#	my @entries =
+#	  $self->{$treeID}
+#	  ->look_down( _tag => "table", activityDetailId => qr/\d\d\d\d\d\d/ );
+#
+#	my $n = 1;
+#
+##print "Found $#entries\n";
+#
+#	foreach (@entries)
+#	{
+#
+#		$n += 1;
+#
+#		my @item = $_->look_down( _tag => 'td' );
+#
+#		if ($self->{'specialDuties'}->{$item[1]->as_text()})
+#		{
+#
+## Need to find the date elsewhere
+## Need to find div for this id, then find parent then find date in the first child
+#			my $friendCell = $self->{$treeID}->look_down(
+#				_tag       => "DIV",
+#				activityId => $_->{activitydetailid}
+#			);
+#			my $parentCell    = $friendCell->parent;
+#			my $dayNumberCell =
+#			  $parentCell->look_down( _tag => "DIV", class => "dayNumberCell" );
+#			my $dayNumber = $dayNumberCell->as_text;
+#
+#			$self->{CAL}->{ $_->{activitydetailid} }->{'Start (UTC)'} =
+#			  $self->dateReWrite($dayNumber) . 'T000000';
+#
+#			$self->{CAL}->{ $_->{activitydetailid} }->{'End (UTC)'} =
+#			  $self->dateReWrite($dayNumber) . 'T235900';
+#
+#		}
+#
+#		my $i;
+#
+#		for ( $i = 0 ; $i < $#item ; $i += 2 )
+#		{
+#			$self->{CAL}->{ $_->{activitydetailid} }->{ $item[$i]->as_text } =
+#			  $item[ $i + 1 ]->as_text;
+#			 #print 'Adding '. $_->{activitydetailid}.' : '. $item[$i]->as_text .' = '.$item[ $i + 1 ]->as_text."\n";
+#		}
+#	}
+#
+#	return 1;
+#}
+#
+#sub dateReWrite
+#{
+#
+#	# translate DD MONTHNAME YYYY
+#	# to
+#	# YYYYMMDD
+#	my $self       = shift;
+#	my $dateString = shift;
+#
+#	my %monthNumbers = (
+#		"January"   => "01",
+#		"February"  => "02",
+#		"March"     => "03",
+#		"April"     => "04",
+#		"May"       => "05",
+#		"June"      => "06",
+#		"July"      => "07",
+#		"August"    => "08",
+#		"September" => "09",
+#		"October"   => "10",
+#		"November"  => "11",
+#		"December"  => "12"
+#	);
+#
+#	my @date = split( / /, $dateString );
+#	return $date[2] . $monthNumbers{ $date[1] } . padDate( $date[0] );
+#}
+#
 #-----------------------------------------------------------------------------------
 # Convert text time format HHMM or HMM or HH:MM to a decimal number of hours 
 #-----------------------------------------------------------------------------------
@@ -244,184 +245,184 @@ sub textTimetoDecimal
 	}
 
 
-sub dateTimeReWrite
-{
+#sub dateTimeReWrite
+#{
+#
+#	# translate DDMMMYY HH:MM
+#	# to
+#	# YYYYMMDDTHHMMSS
+#	my $self       = shift;
+#	my $dateString = shift;
+#
+#	if (!$dateString)
+#	{
+#		return '20010101T000000'; # Ooops
+#	}
+#	#print $dateString.'\n';
+#	if ( $dateString =~ /\d\d\d\d\d\d\d\dT\d\d\d\d\d\d/ )
+#	{
+#		return $dateString;    # Already converted
+#	}
+#
+#	my %monthNumbers = (
+#		"JAN" => "01",
+#		"FEB" => "02",
+#		"MAR" => "03",
+#		"APR" => "04",
+#		"MAY" => "05",
+#		"JUN" => "06",
+#		"JUL" => "07",
+#		"AUG" => "08",
+#		"SEP" => "09",
+#		"OCT" => "10",
+#		"NOV" => "11",
+#		"DEC" => "12"
+#	);
+#
+#	my @date = unpack( "A2A3A2xA2xA2", $dateString );
+#
+#	return "20"
+#	  . $date[2]
+#	  . $monthNumbers{ $date[1] }
+#	  . $date[0] . "T"
+#	  . $date[3]
+#	  . $date[4] . "00Z";
+#}
 
-	# translate DDMMMYY HH:MM
-	# to
-	# YYYYMMDDTHHMMSS
-	my $self       = shift;
-	my $dateString = shift;
+#sub writeICS  
+#{
+#	$| = 1;
+#
+#	my $self = shift;
+#	my $para = shift;
+#	
+##	my $file = '/var/services/web/dance/public/cal/'.$para->{staffid}.'.ics';
+#	my $file = '/var/www/saneRoster/public/cal/'.$para->{staffid}.'.ics';
+#		
+#	if (!open (MYFILE, '>'.$file))
+#	{
+#		*MYFILE = *STDOUT;
+#	}
+#	
+#	print MYFILE "BEGIN:VCALENDAR\nVERSION:2.0\nMETHOD:PUBLISH\nCOMMENT: Generated by saneRoster \n";
+#
+#
+#	foreach my $activityid ( keys %{$self->{CAL}} )
+#	{
+#
+##		if ($self->{CAL}->{$activityid}->{'Checkin (UTC)'}) # make checkin entry optional
+#		if ($self->{CAL}->{$activityid}->{'Checkin (UTC)'}  && $para->{checkin})	
+#			{
+#			# Need a checkin event first
+#			print MYFILE "BEGIN:VEVENT\n";
+#			print MYFILE "DTSTART:"
+#			  . $self->dateTimeReWrite(
+#				$self->{CAL}->{$activityid}->{'Checkin (UTC)'} )
+#			  . "\n";
+#			print MYFILE "DTEND:"
+#			  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'Start (UTC)'} )
+#			  . "\n";
+#			print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "-ci\n";
+#			print MYFILE "DTSTAMP:" . $self->mynow . "\n";
+#			print MYFILE "SUMMARY: Checkin\n";
+#			print MYFILE "DESCRIPTION: Checkin\n";
+#			print MYFILE "END:VEVENT\n";
+#			}
+#
+#		#print an ICS event
+#		print MYFILE "BEGIN:VEVENT\n";
+#		print MYFILE "DTSTART:"
+#		  . $self->dateTimeReWrite(
+#			$self->{CAL}->{$activityid}->{'Start (UTC)'} )
+#		  . "\n";
+#		print MYFILE "DTEND:"
+#		  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'End (UTC)'} )
+#		  . "\n"; 
+#		print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "\n";
+#		print MYFILE "DTSTAMP:" . $self->mynow . "\n";
+#		
+#		
+#		print MYFILE "SUMMARY:";
+#		
+#		# print Dumper($para->{summary});
+#		
+#		foreach my $item (@{$para->{summary}})
+#			{
+#			# print Dumper($item);
+#			if ($self->{CAL}->{$activityid}->{$item})
+#				{
+#				print MYFILE $self->{CAL}->{$activityid}->{$item} . " "
+#				}
+#			else
+#				{
+#				if(!$self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
+#					{
+#					print MYFILE $item . " ";
+#					} 
+#				}
+#			}
+#				
+#		print MYFILE " \n";
+#				
+#		print MYFILE "DESCRIPTION:";
+#		print MYFILE " Depart: " . $self->{CAL}->{$activityid}->{'DEP'} . " "
+#		  if ( $self->{CAL}->{$activityid}->{'DEP'} );
+#		print MYFILE " Arrive: " . $self->{CAL}->{$activityid}->{'ARR'} . " "
+#		  if ( $self->{CAL}->{$activityid}->{'ARR'} );
+#		if ( $self->{CAL}->{$activityid}->{'Crew on board'} )
+#			{
+#			my $c = $self->{CAL}->{$activityid}->{'Crew on board'};
+#			$c =~ s/(\d+)/\  $1/g;
+#			print MYFILE "  Crew: " .$c  . " "	
+#			}  
+#		
+#		  
+#		print MYFILE "\n";
+#		print MYFILE "END:VEVENT\n";
+#	}
+#
+#	print MYFILE "END:VCALENDAR\n";
+#}
 
-	if (!$dateString)
-	{
-		return '20010101T000000'; # Ooops
-	}
-	#print $dateString.'\n';
-	if ( $dateString =~ /\d\d\d\d\d\d\d\dT\d\d\d\d\d\d/ )
-	{
-		return $dateString;    # Already converted
-	}
+#sub mynow()
+#{
+#	my $self = shift;
+#	my $d    = now;
+#	my @date = unpack( "A4xA2xA2xA2xA2xA2", $d );
+#	return $date[0]
+#	  . $date[1]
+#	  . $date[2] . "T"
+#	  . $date[3]
+#	  . $date[4]
+#	  . $date[5];
+#}
+#
+#sub nextMonthKludge()
+#{
+#	#makes the kludgy mm_yyyy month identifier that raido uses for the even kludgier date reload function
+#
+#	my $self = shift;
+#	my $d    = now;
+#	my @date = unpack( "A4xA2xA2xA2xA2xA2", $d );
+#
+#	my $m = $date[1] - 1;
+#	
+#	return $m.'_'.$date[0];
+#}
 
-	my %monthNumbers = (
-		"JAN" => "01",
-		"FEB" => "02",
-		"MAR" => "03",
-		"APR" => "04",
-		"MAY" => "05",
-		"JUN" => "06",
-		"JUL" => "07",
-		"AUG" => "08",
-		"SEP" => "09",
-		"OCT" => "10",
-		"NOV" => "11",
-		"DEC" => "12"
-	);
-
-	my @date = unpack( "A2A3A2xA2xA2", $dateString );
-
-	return "20"
-	  . $date[2]
-	  . $monthNumbers{ $date[1] }
-	  . $date[0] . "T"
-	  . $date[3]
-	  . $date[4] . "00Z";
-}
-
-sub writeICS  
-{
-	$| = 1;
-
-	my $self = shift;
-	my $para = shift;
-	
-#	my $file = '/var/services/web/dance/public/cal/'.$para->{staffid}.'.ics';
-	my $file = '/var/www/saneRoster/public/cal/'.$para->{staffid}.'.ics';
-		
-	if (!open (MYFILE, '>'.$file))
-	{
-		*MYFILE = *STDOUT;
-	}
-	
-	print MYFILE "BEGIN:VCALENDAR\nVERSION:2.0\nMETHOD:PUBLISH\nCOMMENT: Generated by saneRoster \n";
-
-
-	foreach my $activityid ( keys %{$self->{CAL}} )
-	{
-
-#		if ($self->{CAL}->{$activityid}->{'Checkin (UTC)'}) # make checkin entry optional
-		if ($self->{CAL}->{$activityid}->{'Checkin (UTC)'}  && $para->{checkin})	
-			{
-			# Need a checkin event first
-			print MYFILE "BEGIN:VEVENT\n";
-			print MYFILE "DTSTART:"
-			  . $self->dateTimeReWrite(
-				$self->{CAL}->{$activityid}->{'Checkin (UTC)'} )
-			  . "\n";
-			print MYFILE "DTEND:"
-			  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'Start (UTC)'} )
-			  . "\n";
-			print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "-ci\n";
-			print MYFILE "DTSTAMP:" . $self->mynow . "\n";
-			print MYFILE "SUMMARY: Checkin\n";
-			print MYFILE "DESCRIPTION: Checkin\n";
-			print MYFILE "END:VEVENT\n";
-			}
-
-		#print an ICS event
-		print MYFILE "BEGIN:VEVENT\n";
-		print MYFILE "DTSTART:"
-		  . $self->dateTimeReWrite(
-			$self->{CAL}->{$activityid}->{'Start (UTC)'} )
-		  . "\n";
-		print MYFILE "DTEND:"
-		  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'End (UTC)'} )
-		  . "\n"; 
-		print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "\n";
-		print MYFILE "DTSTAMP:" . $self->mynow . "\n";
-		
-		
-		print MYFILE "SUMMARY:";
-		
-		# print Dumper($para->{summary});
-		
-		foreach my $item (@{$para->{summary}})
-			{
-			# print Dumper($item);
-			if ($self->{CAL}->{$activityid}->{$item})
-				{
-				print MYFILE $self->{CAL}->{$activityid}->{$item} . " "
-				}
-			else
-				{
-				if(!$self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
-					{
-					print MYFILE $item . " ";
-					} 
-				}
-			}
-				
-		print MYFILE " \n";
-				
-		print MYFILE "DESCRIPTION:";
-		print MYFILE " Depart: " . $self->{CAL}->{$activityid}->{'DEP'} . " "
-		  if ( $self->{CAL}->{$activityid}->{'DEP'} );
-		print MYFILE " Arrive: " . $self->{CAL}->{$activityid}->{'ARR'} . " "
-		  if ( $self->{CAL}->{$activityid}->{'ARR'} );
-		if ( $self->{CAL}->{$activityid}->{'Crew on board'} )
-			{
-			my $c = $self->{CAL}->{$activityid}->{'Crew on board'};
-			$c =~ s/(\d+)/\  $1/g;
-			print MYFILE "  Crew: " .$c  . " "	
-			}  
-		
-		  
-		print MYFILE "\n";
-		print MYFILE "END:VEVENT\n";
-	}
-
-	print MYFILE "END:VCALENDAR\n";
-}
-
-sub mynow()
-{
-	my $self = shift;
-	my $d    = now;
-	my @date = unpack( "A4xA2xA2xA2xA2xA2", $d );
-	return $date[0]
-	  . $date[1]
-	  . $date[2] . "T"
-	  . $date[3]
-	  . $date[4]
-	  . $date[5];
-}
-
-sub nextMonthKludge()
-{
-	#makes the kludgy mm_yyyy month identifier that raido uses for the even kludgier date reload function
-
-	my $self = shift;
-	my $d    = now;
-	my @date = unpack( "A4xA2xA2xA2xA2xA2", $d );
-
-	my $m = $date[1] - 1;
-	
-	return $m.'_'.$date[0];
-}
-
-sub padDate
-{
-	my $str = shift;
-
-	if ( length($str) == 1 )
-	{
-		return '0' . $str;
-	}
-	else
-	{
-		return $str;
-	}
-}
+#sub padDate
+#{
+#	my $str = shift;
+#
+#	if ( length($str) == 1 )
+#	{
+#		return '0' . $str;
+#	}
+#	else
+#	{
+#		return $str;
+#	}
+#}
 
 #
 # Log book scraping code
