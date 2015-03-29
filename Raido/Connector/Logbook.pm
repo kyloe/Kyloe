@@ -15,6 +15,7 @@ use DateTime;
 use DateTime::Event::Sunrise;
 use DateTime::Format::ISO8601; 
 
+# Add as part of master branch externd comment
 
 use strict;
 use warnings;
@@ -992,7 +993,8 @@ sub parseResponseToTree
 		$self->{TREE}->parse($self->{MECH}->content());
 				
 		$self->{TREE}->elementify();
-		#print "Elementified\n";
+		print $self->{MECH}->content();
+		
 		}
 	else 	
 		{
