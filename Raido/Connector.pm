@@ -27,7 +27,7 @@ my $specialDuties = {
 		'SBY'=>'Standby',
 		'SB1'=>'Early Standby',
 		'SB2'=>'Late Standby',
-		#'DO'=>'Day Off',
+		'DO'=>'Day Off',
 		'RDO'=>'Rest Day',
 		'LVE'=>'Leave',
 		'JUR'=>'Jury Duty',
@@ -44,7 +44,11 @@ my $specialDuties = {
 		'ASF'=>'ASF .. hmmm .. not sure ... "A Small Fish" perhaps?',
 		};
 
-
+my $patchedTimes = {
+		'DO'=>'Day Off',
+		'RDO'=>'Rest Day',
+		'LVE'=>'Leave',
+};
 
 #-------------------------------------------------------------------------------------
 # Creates a new connector
@@ -67,6 +71,7 @@ sub new
 	$obj->{MECH}->cookie_jar( HTTP::Cookies->new( file => "/home/ian/cookies.txt") );
 	
 	$obj->{'specialDuties'} = $specialDuties;
+	$obj->{'patchedTimes'} = $patchedTimes;
 
 	return $obj;    # Return our newly blessed and loaded object
 }
@@ -202,6 +207,13 @@ sub parseRoster
 			$self->{CAL}->{ $_->{activitydetailid} }->{ $item[$i]->as_text } =
 			  $item[ $i + 1 ]->as_text;
 			# print 'Adding '. $_->{activitydetailid}.' : '. $item[$i]->as_text .' = '.$item[ $i + 1 ]->as_text."\n";
+			# WOrk around for Raido rubbish
+			# If CODE is in list of times that need 'patching' set start and end times to Local and not UTC for all day activities
+			if ($self->{'patchedTimes'}->{$item[$i]->as_text})
+			{
+				$self->{CAL}->{ $_->{activitydetailid} }->{ 'Start (UTC)' } =~ s/Z//g;
+				$self->{CAL}->{ $_->{activitydetailid} }->{ 'End (UTC)' } =~ s/Z//g;
+			}
 		}
 	}
 
