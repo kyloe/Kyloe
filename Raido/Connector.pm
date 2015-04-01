@@ -13,7 +13,6 @@ use strict;
 use warnings;
 
 
-# my $specialDuties = {'FLT'=>'Flight','HTL'=>'Hotel','SCO'=>'Called out','APT'=>'Airport Standby','SBY'=>'Standby','SB1'=>'Early Standby','SB2'=>'Late Standby','DO'=>'Day Off','RDO'=>'Rest Day','LVE'=>'Leave','JUR'=>'Jury Duty','RST'=>'Rest Day','N/A'=>'Not Available'};
 my $specialDuties = {
 		'SDR'=>'Self Drive',
 		'MTG'=>'Meeting',
