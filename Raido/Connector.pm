@@ -294,7 +294,7 @@ sub dateTimeReWriteLocal
 	  . $monthNumbers{ $date[1] }
 	  . $date[0] . "T"
 	  . $date[3]
-	  . $date[4] . "00Z";
+	  . $date[4] . "00";
 }
 sub writeMessage
 {
