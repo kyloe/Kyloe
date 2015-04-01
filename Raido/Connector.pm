@@ -47,6 +47,7 @@ my $patchedTimes = {
 		'DO'=>'Day Off',
 		'RDO'=>'Rest Day',
 		'LVE'=>'Leave',
+		'N/A'=>'Not Available = LEAVE ME ALONE!',
 };
 
 #-------------------------------------------------------------------------------------
