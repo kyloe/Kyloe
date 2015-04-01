@@ -14,26 +14,26 @@ use warnings;
 
 
 my $specialDuties = {
-		'SDR'=>'Self Drive',
-		'MTG'=>'Meeting',
+		'SDR'=>'Self Drive - OK, we\'ve got stolen police car, a full tank of gas and we\'re wearing sunglasses ...',
+		'MTG'=>'Meeting - I LOVE meetings me',
 		'TAX'=>'Taxi',
-		'HTL'=>'Hotel',
+		'HTL'=>'Hotel or perhaps ... Sumbrugh',
 		'ADM'=>'Admin',
 		'FAD'=>'Flex Admin',
-		'MAD'=>'Admin',
+		'MAD'=>'Like Admin - but madder',
 		'SCO'=>'Called out',
 		'APT'=>'Airport Standby (ARRRGGGHHHH)',
 		'SBY'=>'Standby',
 		'SB1'=>'Early Standby',
 		'SB2'=>'Late Standby',
-		'DO'=>'Day Off',
-		'RDO'=>'Rest Day',
+		'DO'=>'Day Off - Hoorah!',
+		'RDO'=>'Please can I please ...',
 		'LVE'=>'Leave',
-		'JUR'=>'Jury Duty',
+		'JUR'=>'Jury Duty (Guilty)',
 		'N/A'=>'Not Available = LEAVE ME ALONE!',
 		'CRM'=>'Crew Resource Management - cuddles all round',
 		'DG'=>'Dangerous Goods',
-		'SEC'=>'Security - Touch touchy',
+		'SEC'=>'Security - Touchy touchy',
 		'RST'=>'ZZzzzz...',
 		'SCK'=>'Sicky',
 		'COM'=>'COM ... Hmmm wassat?',
@@ -48,6 +48,7 @@ my $patchedTimes = {
 		'RDO'=>'Rest Day',
 		'LVE'=>'Leave',
 		'N/A'=>'Not Available = LEAVE ME ALONE!',
+		'RST'=>'ZZzzzz...',
 };
 
 #-------------------------------------------------------------------------------------
