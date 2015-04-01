@@ -208,11 +208,11 @@ sub parseRoster
 			# print 'Adding '. $_->{activitydetailid}.' : '. $item[$i]->as_text .' = '.$item[ $i + 1 ]->as_text."\n";
 			# WOrk around for Raido rubbish
 			# If CODE is in list of times that need 'patching' set start and end times to Local and not UTC for all day activities
-			if ($self->{'patchedTimes'}->{$item[$i]->as_text})
-			{
-				$self->{CAL}->{ $_->{activitydetailid} }->{ 'Start (UTC)' } =~ s/Z//g;
-				$self->{CAL}->{ $_->{activitydetailid} }->{ 'End (UTC)' } =~ s/Z//g;
-			}
+			#if ($self->{'patchedTimes'}->{$item[$i]->as_text})
+			#{
+			#	$self->{CAL}->{ $_->{activitydetailid} }->{ 'Start (UTC)' } =~ s/Z//g;
+			#	$self->{CAL}->{ $_->{activitydetailid} }->{ 'End (UTC)' } =~ s/Z//g;
+			#}
 		}
 	}
 
@@ -248,8 +248,12 @@ sub dateReWrite
 	return $date[2] . $monthNumbers{ $date[1] } . padDate( $date[0] );
 }
 
+sub dateTimeReWrite {
+	my $self = shift;
+	return $self->dateTimeReWriteLocal(@_).'Z';
+}
 
-sub dateTimeReWrite
+sub dateTimeReWriteLocal
 {
 
 	# translate DDMMMYY HH:MM
@@ -360,13 +364,28 @@ sub writeICS
 
 		#print an ICS event
 		print MYFILE "BEGIN:VEVENT\r\n";
-		print MYFILE "DTSTART:"
-		  . $self->dateTimeReWrite(
-			$self->{CAL}->{$activityid}->{'Start (UTC)'} )
-		  . "\r\n";
-		print MYFILE "DTEND:"
-		  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'End (UTC)'} )
-		  . "\r\n"; 
+		# If thsi is an activity code that needs its time correcting
+		if ($self->{'patchedTimes'}->{$self->{CAL}->{$activityid}->{CODE}})
+			{
+			print MYFILE "DTSTART:"
+			  . $self->dateTimeReWriteLocal(
+				$self->{CAL}->{$activityid}->{'Start (UTC)'} )
+		  	. "\r\n";
+			print MYFILE "DTEND:"
+			  . $self->dateTimeReWriteLocal( $self->{CAL}->{$activityid}->{'End (UTC)'} )
+			  . "\r\n"; 
+			}
+		 else
+		 {
+			print MYFILE "DTSTART:"
+			  . $self->dateTimeReWrite(
+				$self->{CAL}->{$activityid}->{'Start (UTC)'} )
+		  	. "\r\n";
+			print MYFILE "DTEND:"
+			  . $self->dateTimeReWrite( $self->{CAL}->{$activityid}->{'End (UTC)'} )
+			  . "\r\n"; 
+		 	
+		 }
 		#print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "\r\n";
 		print MYFILE "UID:saneRoster-" . $activityid .'-'. $self->dateTimeReWrite($self->{CAL}->{$activityid}->{'Start (UTC)'}). "\r\n";
 		print MYFILE "DTSTAMP:" . $self->mynow . "\r\n";
