@@ -307,7 +307,7 @@ sub writeMessage
 	$birthdayMsg .= "DTSTART:20141031T090000\r\n";
 	$birthdayMsg .= "DTEND:20141031T235900\r\n";
 	$birthdayMsg .= "SUMMARY: Ian's Birthday\r\n";
-	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Red Wine, Malt Whisky and Chocolate\r\n";
+	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Curry, Aston Martins and Fresh Corriander\r\n";
 	$birthdayMsg .= "UID:saneRoster-" .$dateStamp. "-msg\r\n";
 	$birthdayMsg .= "DTSTAMP:" . $dateStamp . "\r\n";
 	
@@ -389,7 +389,7 @@ sub writeICS
 		 	
 		 }
 		#print MYFILE "UID:saneRoster-" . $activityid .'-'.$self->mynow(). "\r\n";
-		print MYFILE "UID:saneRoster-" . $activityid .'-'. $self->dateTimeReWrite($self->{CAL}->{$activityid}->{'Start (UTC)'}). "\r\n";
+		print MYFILE "UID:saneRoster-" . $activityid .'-'. $self->dateTimeReWrite($self->{CAL}->{$activityid}->{'Start (UTC)'}).'-'.$self->mynow(). "\r\n";
 		print MYFILE "DTSTAMP:" . $self->mynow . "\r\n";
 		
 		
