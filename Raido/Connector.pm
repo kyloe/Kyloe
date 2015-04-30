@@ -17,7 +17,7 @@ my $specialDuties = {
 		'SDR'=>'Self Drive - OK, we\'ve got stolen police car, a full tank of gas and we\'re wearing sunglasses ...',
 		'MTG'=>'Meeting - I LOVE meetings me',
 		'TAX'=>'Taxi',
-		'HTL'=>'Hotel or perhaps ... Sumbrugh',
+		'HTL'=>'Hotel or perhaps ... Sumburgh',
 		'ADM'=>'Admin',
 		'FAD'=>'Flex Admin',
 		'MAD'=>'Like Admin - but madder',
@@ -27,19 +27,19 @@ my $specialDuties = {
 		'SB1'=>'Early Standby',
 		'SB2'=>'Late Standby',
 		'DO'=>'Day Off - Hoorah!',
-		'RDO'=>'Please can I please ...',
+		'RDO'=>'AKA "Fly Dubai" or "BA" interview',
 		'LVE'=>'Leave',
 		'JUR'=>'Jury Duty (Guilty)',
 		'N/A'=>'Not Available = LEAVE ME ALONE!',
 		'CRM'=>'Crew Resource Management - cuddles all round',
 		'DG'=>'Dangerous Goods',
-		'SEC'=>'Security - Touchy touchy',
+		'SEC'=>'Security - Well Helllooooo ... Touchy touchy??',
 		'RST'=>'ZZzzzz...',
-		'SCK'=>'Sicky',
+		'SCK'=>'Sicky - yeah right ... one too many???',
 		'COM'=>'COM ... Hmmm wassat?',
 		'ACO'=>'Airport Call Out',
 		'WDO'=>'Money money money',
-		'ES'=>'Emergency and Security',
+		'ES'=>'Emergency and Security (I\'m so bored I may have to chew off my own arm )',
 		'ASF'=>'ASF .. hmmm .. not sure ... "A Small Fish" perhaps?',
 		};
 
@@ -49,6 +49,7 @@ my $patchedTimes = {
 		'LVE'=>'Leave',
 		'N/A'=>'Not Available = LEAVE ME ALONE!',
 		'RST'=>'ZZzzzz...',
+		'SCK'=>'Sicky - yeah right ... one too many???',		
 };
 
 #-------------------------------------------------------------------------------------
