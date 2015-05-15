@@ -239,7 +239,7 @@ sub getPDF()
 	boxedWord($self->{pdf},"Grand total",$cur_x_pos,$cur_y_pos,190);
 
 #	$self->{pdf}->saveAs('/var/www/saneRoster/public/pdf/'.$self->{staffNumber}.'/'.$self->{filename});
-	$self->{pdf}->saveAs(config->{public}.'/pdf/'.$self->{staffNumber}.'/'.$self->{filename});
+	$self->{pdf}->saveAs(config->{appdir}.config->{pubdir}.'/pdf/'.$self->{staffNumber}.'/'.$self->{filename});
 
 	}
 	

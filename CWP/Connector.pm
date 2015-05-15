@@ -96,11 +96,11 @@ sub getRoster
 			my $ciMin = substr $ciTime,3,2;
 			my $ci_id = $ics->add_vevent();
 			$ics->add_vevent_property($ci_id,'DESCRIPTION','Checkin');
-			$ics->add_vevent_property($id,'DTSTART',$year.$month.$day.'T'.$ciHour.$ciMin.'00');
-			$ics->add_vevent_property($id,'DTEND',$year.$month.$day.'T'.$ciHour.($ciMin+1));
-			$ics->add_vevent_property($id,'UID',"saneRoster-" . $event->{IdEmpNo}.'-'.$self->mynow().'-'.$uidCounter++);
-			$ics->add_vevent_property($id,'SUMMARY','Checkin');
-			$ics->add_vevent_property($id,'DTSTAMP',$self->mynow());
+			$ics->add_vevent_property($ci_id,'DTSTART',$year.$month.$day.'T'.$ciHour.$ciMin.'00');
+			$ics->add_vevent_property($ci_id,'DTEND',$year.$month.$day.'T'.$hour.$min.'00');
+			$ics->add_vevent_property($ci_id,'UID',"saneRoster-" . $event->{IdEmpNo}.'-'.$self->mynow().'-'.$uidCounter++);
+			$ics->add_vevent_property($ci_id,'SUMMARY','Checkin');
+			$ics->add_vevent_property($ci_id,'DTSTAMP',$self->mynow());
 			}	
 
         
