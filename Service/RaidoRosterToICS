@@ -1,0 +1,33 @@
+#!/usr/bin/perl
+package Kyloe::Service::RaidoRosterToICS;
+use DBI;
+use Kyloe::Service;
+
+sub getConfig {
+	# die "getConfig() not implemented";
+	$dbh = DBI->connect("dbi:Pg:dbname=raido;user=raido;password=raido") or die "Could not connect to database";
+	my $sql = qq/select 
+	update person set "calendarApplication" = '$calApp', "calendarFormat" = '$calFormat', "email" = '$email' where "staff_id" = '$staff_id'  /;
+	my $sth = $dbh->prepare($sql);
+	$sth->execute();
+	# my ($result) = $sth->fetchrow;
+	
+}
+
+sub getUserList {
+	#die "getUserList() not implemented";
+	# LOgon to raido database and get a list of users who 
+}
+
+sub login {
+	die "login() not implemented";
+}
+
+sub doProcessing {
+	die "doProcessing() not implmented";
+}
+
+sub writeData {
+	die "getUserList() not implemented";
+}
+

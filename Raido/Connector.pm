@@ -308,7 +308,7 @@ sub writeMessage
 	$birthdayMsg .= "DTSTART:20141031T090000\r\n";
 	$birthdayMsg .= "DTEND:20141031T235900\r\n";
 	$birthdayMsg .= "SUMMARY: Ian's Birthday\r\n";
-	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Curry, Aston Martins and Fresh Corriander\r\n";
+	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Nehru Jackets, Aston Martins and Fresh Corriander\r\n";
 	$birthdayMsg .= "UID:saneRoster-" .$dateStamp. "-msg\r\n";
 	$birthdayMsg .= "DTSTAMP:" . $dateStamp . "\r\n";
 	
