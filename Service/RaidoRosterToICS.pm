@@ -15,7 +15,7 @@ sub run {
 	my $sql = qq/select c.id, c.username, c.password from credentials c, service s where c.credential_id = s.id and s.name = 'RaidoRosterToICS'/;
 	my $sth = $dbh->prepare($sql);
  	$sth->execute();
-	my $users = $sth->fetchall_arrayref({id=>1,username=>1,password=>1});
+	my $users = $sth->fetchall_arrayref({c.id=>1,c.username=>1,c.password=>1});
 	
 	foreach my $user ($users)  
 		{
