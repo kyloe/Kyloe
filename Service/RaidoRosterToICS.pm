@@ -9,18 +9,12 @@ my $dbh = DBI->connect("dbi:Pg:dbname=raido;user=raido;password=raido") or die "
 my $userList; # a statement handle to allow us to step through users
 my $raido;
 
-sub getUserList {
-	#die "getUserList() not implemented";
-	# Logon to raido database and get a list of users who 
-	# 
-	my $sql = qq/select c.id, c.username, c.password from credentials c, service s where c.credential_id = s.id and s.name = 'RaidoRosterToICS'/;
-	my $sth = $dbh->prepare($sql);
- 	$sth->execute();
-}
-
 
 sub run {
 
+	my $sql = qq/select c.id, c.username, c.password from credentials c, service s where c.credential_id = s.id and s.name = 'RaidoRosterToICS'/;
+	my $sth = $dbh->prepare($sql);
+ 	$sth->execute();
 	my $users = $sth->fetchall_arrayref({id=>1,username=>1,password=>1});
 	
 	foreach my $user ($users)  
