@@ -14,3 +14,6 @@ sub import {
 sub run {
 	die "run() not implemented";
 }
+
+
+1;
