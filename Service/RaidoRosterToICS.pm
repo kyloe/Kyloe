@@ -12,7 +12,7 @@ my $raido;
 
 sub run {
 
-	my $sql = qq/select c.id, c.username, c.password from credentials c, service s where c.id = s.credential_id and s.name = 'Raido Roster to ICS'/;
+	my $sql = qq/select c.id, c.username, c.password from credentials c, service s where c.service_id = s.id and s.name = 'Raido Roster to ICS'/;
 	my $sth = $dbh->prepare($sql);
  	$sth->execute();
 	my $users = $sth->fetchall_arrayref({c.id=>1,c.username=>1,c.password=>1});
