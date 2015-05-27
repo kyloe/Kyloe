@@ -18,7 +18,7 @@ sub run {
  	$sth->execute();
 	my $users = $sth->fetchall_arrayref({i=>1,u=>1,p=>1});
 
-	foreach my $user ($users)  
+	foreach my $user (@$users)  
 		{
 	print "User:".Dumper($user);
 		my $raido = Kyloe::Raido::Connector::Roster->new();
