@@ -28,10 +28,10 @@ sub run {
 		$raido->parseRoster('TREE') or die "Could not parse main roster\n";
 		$raido->parseRoster('TREE_2') or die "Could not parse next months roster\n";
 
-		my $sql = qq/select p.name, p.value from parameters p, credentials c, service s, person pe  where p.credential_id = c.id AND c.service_id = s.id AND s.name = 'Raido Roster to ICS' AND c.person_id = $user->{i}/;
+		my $sql = qq/select p.name as name, p.value as value from parameters p, credentials c, service s, person pe  where p.credential_id = c.id AND c.service_id = s.id AND s.name = 'Raido Roster to ICS' AND c.person_id = $user->{i}/;
 		my $sth = $dbh->prepare($sql);
 	 	$sth->execute();
-		my $pref = $sth->fetchall_hashref(p.name);
+		my $pref = $sth->fetchall_hashref(name);
 		print Dumper($pref);
 		my $params = {staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>$pref->{altsummary}->{value},summary=>$pref->{summary}->{value}};
 		$raido->writeICS($params);
