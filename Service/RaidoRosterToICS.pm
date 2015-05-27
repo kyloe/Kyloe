@@ -20,7 +20,7 @@ sub run {
 
 	foreach my $user ($users)  
 		{
-	print Dumper($user);
+	print "User:".Dumper($user);
 		my $raido = Kyloe::Raido::Connector::Roster->new();
 	
 		$raido->login($user->{u},$user->{p}) or die "Login failed\n";
