@@ -17,10 +17,10 @@ sub run {
 	my $sth = $dbh->prepare($sql);
  	$sth->execute();
 	my $users = $sth->fetchall_arrayref({i=>1,u=>1,p=>1});
-	print Dumper($users);
+
 	foreach my $user ($users)  
 		{
-
+	print Dumper($user);
 		my $raido = Kyloe::Raido::Connector::Roster->new();
 	
 		$raido->login($user->{u},$user->{p}) or die "Login failed\n";
