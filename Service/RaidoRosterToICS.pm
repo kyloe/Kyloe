@@ -13,7 +13,7 @@ my $raido;
 
 sub run {
 
-	my $sql = qq/select c.id as i, c.username as u, c.password as p from credentials c, service s where c.service_id = s.id and s.name = 'Raido Roster to ICS'/;
+	my $sql = qq/select c.person_id as i, c.username as u, c.password as p from credentials c, service s where c.service_id = s.id and s.name = 'Raido Roster to ICS'/;
 	my $sth = $dbh->prepare($sql);
  	$sth->execute();
 	my $users = $sth->fetchall_arrayref({i=>1,u=>1,p=>1});
@@ -28,7 +28,7 @@ sub run {
 		$raido->parseRoster('TREE') or die "Could not parse main roster\n";
 		$raido->parseRoster('TREE_2') or die "Could not parse next months roster\n";
 
-		my $sql = qq/select p.name, p.value from parameters p, credentials c, service s where c.parameter_id = p.id AND c.credential_id = s.id AND s.name = 'RaidoRosterToICS'/;
+		my $sql = qq/select p.name, p.value from parameters p, credentials c, service s, person pe  where p.credential_id = c.id AND c.service_id = s.id AND s.name = 'Raido Roster to ICS' AND c.person_id = $user->{i}/;
 		my $sth = $dbh->prepare($sql);
 	 	$sth->execute();
 		my $pref = $sth->fetchall_hashref(p.name);
@@ -42,4 +42,6 @@ sub run {
 }
 
 1;
+
+# select p.name, p.value from parameters p, credentials c, service s, person pe  where p.credential_id = c.id AND c.service_id = s.id AND s.name = 'Raido Roster To ICS' AND c.person_id = 684;
 
