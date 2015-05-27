@@ -3,7 +3,8 @@ package Kyloe::Service::RaidoRosterToICS;
 use DBI;
 use Kyloe::Service;
 use Kyloe::Raido::Connector::Roster;
- 
+use Data::Dumper;
+
 my $connector;
 my $dbh = DBI->connect("dbi:Pg:dbname=raido;user=raido;password=raido") or die "Could not connect to database";
 my $userList; # a statement handle to allow us to step through users
@@ -16,13 +17,13 @@ sub run {
 	my $sth = $dbh->prepare($sql);
  	$sth->execute();
 	my $users = $sth->fetchall_arrayref({i=>1,u=>1,p=>1});
-	
+	print Dumper($users);
 	foreach my $user ($users)  
 		{
 
 		my $raido = Kyloe::Raido::Connector::Roster->new();
 	
-		$raido->login($user->{username},$user->{password}) or die "Login failed\n";
+		$raido->login($user->{u},$user->{p}) or die "Login failed\n";
 		$raido->getRoster or die "Couldn't retrieve current roster page\n";
 		$raido->getNextMonth or die "Could not retrieve next months roster\n";
 		$raido->parseRoster('TREE') or die "Could not parse main roster\n";
