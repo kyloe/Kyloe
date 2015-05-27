@@ -43,5 +43,4 @@ sub run {
 
 1;
 
-# select p.name, p.value from parameters p, credentials c, service s, person pe  where p.credential_id = c.id AND c.service_id = s.id AND s.name = 'Raido Roster To ICS' AND c.person_id = 684;
 
