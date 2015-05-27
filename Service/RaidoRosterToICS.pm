@@ -20,7 +20,6 @@ sub run {
 
 	foreach my $user (@$users)  
 		{
-	print "User:".Dumper($user);
 		my $raido = Kyloe::Raido::Connector::Roster->new();
 	
 		$raido->login($user->{u},$user->{p}) or die "Login failed\n";
@@ -33,7 +32,7 @@ sub run {
 		my $sth = $dbh->prepare($sql);
 	 	$sth->execute();
 		my $pref = $sth->fetchall_hashref(p.name);
-		
+		print Dumper($pref);
 		my $params = {staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>$pref->{altsummary}->{value},summary=>$pref->{summary}->{value}};
 		$raido->writeICS($params);
 		undef $raido;
