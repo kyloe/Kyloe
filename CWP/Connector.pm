@@ -105,37 +105,48 @@ sub getRoster
 			$ics->add_vevent_property($ci_id,'DTSTAMP',$self->mynow());
 			}	
 
+
         
         	if ($specialDuties->{$event->{'ActivityDesc'}})
         		{
         		$arrHour = '23';
         		$arrMin = '59';        		
+        		$depHour = '00';
+        		$depMin = '01';
         		}
         	else
         		{
+        		#No these are not the wrong way round - its a bug in CWP that we're munging
         		$arrHour = substr $event->{'STD'},0,2;
         		$arrMin = substr $event->{'STD'},3,2;        		
+        		$depHour = substr $event->{'STA'},0,2;
+        		$depMin = substr $event->{'STA'},0,2;
         		}
 
 			# TODO: makedate objects for all the useful dates
 			# compare start date with end date time and see if we have rolled past midnight
 			# if so - add aday to end date time
+			# calculate length of shift then add to start time to get end time (fer fucks sake)
+			my $std_dt = Class::Date->new([$year,$month,$day,$depHour,$depMin,0],'UTC');
+			my $sta_dt = Class::Date->new([$year,$month,$day,$arrHour,$arrMin,0],'UTC');
+
+	
+		if ($sta_dt < $std_dt)
+			{
+			$sta_dt += '1D';
+			}
+
 			
 			my $start_dt = Class::Date->new([$year,$month,$day,$hour,$min,0],'UTC');
-			my $end_dt = Class::Date->new([$year,$month,$day,$arrHour,$arrMin,0]);
+			my $end_dt = $start_dt + ($sta_dt - $std_dt); 
 		
 
 #        	$arrTime = $arrHour.$arrMin;
 #        	$arrTime =~ s/://g;
         	
-	
-		if ($end_dt < $start_dt)
-			{
-			$end_dt += '1D';
-			}
 			
 		$ics->add_vevent_property($id,'DTSTART',$start_dt->year.lz($start_dt->mon).lz($start_dt->day).'T'.lz($start_dt->hour).lz($start_dt->min).'00Z');		
-		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T'.lz($end_dt->hour).lz($end_dt->min).'00');			
+		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T'.lz($end_dt->hour).lz($end_dt->min).'00Z');			
 		$ics->add_vevent_property($id,'UID',"saneRoster-" . $event->{IdEmpNo}.'-'.$self->mynow().'-'.$uidCounter++);
 		$ics->add_vevent_property($id,'SUMMARY',$event->{'ActivityDesc'}.':'.$event->{'Origin'}.' '.$event->{'Destination'});
 		$ics->add_vevent_property($id,'DTSTAMP',$self->mynow());
