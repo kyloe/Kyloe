@@ -122,7 +122,7 @@ sub getRoster
         		$arrHour = substr $event->{'STD'},0,2;
         		$arrMin = substr $event->{'STD'},3,2;        		
         		$depHour = substr $event->{'STA'},0,2;
-        		$depMin = substr $event->{'STA'},0,2;
+        		$depMin = substr $event->{'STA'},3,2;
         		}
 
 			# TODO: makedate objects for all the useful dates
