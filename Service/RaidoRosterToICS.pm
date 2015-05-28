@@ -35,7 +35,7 @@ sub run {
 		print Dumper(split(',',$pref->{summary}->{value}));
 		print Dumper(split(',',$pref->{altsummary}->{value}));
 		
-		my $params = {staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>split(',',$pref->{altsummary})->{value},summary=>split(',',$pref->{summary}->{value})};
+		my $params = {staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>split(',',$pref->{altsummary}->{value}),summary=>split(',',$pref->{summary}->{value})};
 		$raido->writeICS($params);
 		undef $raido;
 		}

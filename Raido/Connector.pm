@@ -398,8 +398,7 @@ sub writeICS
 		
 		# print Dumper($para->{summary});
 
-			print "\n\nSummary\n".Dumper($para->{summary});
-			print "\n\nAltSummary\n".Dumper($para->{altsummary});
+			print "\n\nSummary\n".Dumper($para);
 		
 		
 		if($self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
