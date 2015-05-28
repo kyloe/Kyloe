@@ -415,6 +415,7 @@ sub writeICS
 			} 	
 		else
 			{
+			print Dumper($para->{summary});
 			foreach my $item (@{$para->{summary}})
 				{
 				if ($self->{CAL}->{$activityid}->{$item})
