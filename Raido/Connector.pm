@@ -395,12 +395,7 @@ sub writeICS
 		
 		
 		print MYFILE "SUMMARY:";
-		
-		# print Dumper($para->{summary});
 
-			print "\n\nSummary\n".Dumper($para);
-		
-		
 		if($self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
 			{
 			foreach my $item (@{$para->{altsummary}})
