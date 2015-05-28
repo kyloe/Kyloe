@@ -89,6 +89,8 @@ sub getRoster
         	my $min = substr $date,14,2;
         	my $arrHour;
         	my $arrMin;
+        	my $depHour;
+        	my $depMin;
 			my $arrTime;
 			
 		if ($event->{'CheckInTime'})
