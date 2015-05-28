@@ -325,7 +325,7 @@ sub writeICS
 	my $file;
 	if ($para->{altfilename})
 		{
-		$file = '/var/services/web/dance/public/cal/'.$para->{altfilename}.'.ics';
+		$file = $para->{altfilename};
 		}
 	else
 		{	
