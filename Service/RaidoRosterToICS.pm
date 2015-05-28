@@ -33,7 +33,7 @@ sub run {
 	 	$sth->execute();
 		my $pref = $sth->fetchall_hashref(name);
 		
-		my $params = {staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>[split(',',$pref->{altsummary}->{value})],summary=>[split(',',$pref->{summary}->{value})]};
+		my $params = {altfilename=>'/usr/app/saneRoster/public/cal/'.$pref->{staffid}->{value}.'ics',staffid => $pref->{staffid}->{value}, password => $pref->{password}->{value},	checkin=>$pref->{checkin}->{value},	altsummary=>[split(',',$pref->{altsummary}->{value})],summary=>[split(',',$pref->{summary}->{value})]};
 		$raido->writeICS($params);
 		undef $raido;
 		}
