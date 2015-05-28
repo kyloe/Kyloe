@@ -397,6 +397,9 @@ sub writeICS
 		print MYFILE "SUMMARY:";
 		
 		# print Dumper($para->{summary});
+
+			print "\n\nSummary\n".Dumper($para->{summary});
+			print "\n\nAltSummary\n".Dumper($para->{altsummary});
 		
 		
 		if($self->{'specialDuties'}->{ $self->{CAL}->{$activityid}->{CODE} })
@@ -415,9 +418,8 @@ sub writeICS
 			} 	
 		else
 			{
-			print Dumper($para->{summary});
 			foreach my $item (@{$para->{summary}})
-				{
+				{ 
 				if ($self->{CAL}->{$activityid}->{$item})
 					{
 					print MYFILE $self->{CAL}->{$activityid}->{$item};
