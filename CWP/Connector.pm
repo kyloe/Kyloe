@@ -78,7 +78,6 @@ sub getRoster
 		{
 		$id = $ics->add_vevent();
 
-		$ics->add_vevent_property($id,'DESCRIPTION',$event->{'ActivityDesc'}.' - '.$event->{'STA'}.' '.$event->{'Origin'}.' '.$event->{'Destination'}.' '.$event->{'STD'});
         
 
         	my $date = $event->{'ActivityDate'};
@@ -146,9 +145,21 @@ sub getRoster
 #        	$arrTime = $arrHour.$arrMin;
 #        	$arrTime =~ s/://g;
         	
-			
+# And now a fudge to hide the rostering of OFF and LVE days for 01:00 to 01:00 Local coz that is 00:00 to 00:00 UTC        	
+	if ($specialDuties->{$event->{'ActivityDesc'}})        
+		{	
+		$ics->add_vevent_property($id,'DESCRIPTION',$event->{'ActivityDesc'}.' - 00:00 '.$event->{'Origin'}.' '.$event->{'Destination'}.' 23:59');			
+		$ics->add_vevent_property($id,'DTSTART',$start_dt->year.lz($start_dt->mon).lz($start_dt->day).'T000000Z');		
+		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T235900Z');			
+		}
+	else
+		{
+		$ics->add_vevent_property($id,'DESCRIPTION',$event->{'ActivityDesc'}.' - '.$event->{'STA'}.' '.$event->{'Origin'}.' '.$event->{'Destination'}.' '.$event->{'STD'});			
 		$ics->add_vevent_property($id,'DTSTART',$start_dt->year.lz($start_dt->mon).lz($start_dt->day).'T'.lz($start_dt->hour).lz($start_dt->min).'00Z');		
 		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T'.lz($end_dt->hour).lz($end_dt->min).'00Z');			
+			
+		}
+
 		$ics->add_vevent_property($id,'UID',"saneRoster-" . $event->{IdEmpNo}.'-'.$self->mynow().'-'.$uidCounter++);
 		$ics->add_vevent_property($id,'SUMMARY',$event->{'ActivityDesc'}.':'.$event->{'Origin'}.' '.$event->{'Destination'});
 		$ics->add_vevent_property($id,'DTSTAMP',$self->mynow());
