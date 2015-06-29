@@ -149,8 +149,8 @@ sub getRoster
 	if ($specialDuties->{$event->{'ActivityDesc'}})        
 		{	
 		$ics->add_vevent_property($id,'DESCRIPTION',$event->{'ActivityDesc'}.' - 00:00 '.$event->{'Origin'}.' '.$event->{'Destination'}.' 23:59');			
-		$ics->add_vevent_property($id,'DTSTART',$start_dt->year.lz($start_dt->mon).lz($start_dt->day).'T000000Z');		
-		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T235900Z');			
+		$ics->add_vevent_property($id,'DTSTART',$start_dt->year.lz($start_dt->mon).lz($start_dt->day).'T000000');		
+		$ics->add_vevent_property($id,'DTEND',$end_dt->year.lz($end_dt->mon).lz($end_dt->day).'T235900');			
 		}
 	else
 		{
@@ -182,7 +182,7 @@ sub writeMessage
 	$birthdayMsg .= "DTSTART:20151031T090000\n";
 	$birthdayMsg .= "DTEND:20151031T235900\n";
 	$birthdayMsg .= "SUMMARY: Ian's Birthday\n";
-	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Red Wine, Malt Whisky and Chocolate\n";
+	$birthdayMsg .= "DESCRIPTION: Today is Ian's Birthday, Ian likes Corriander (yes, lots of corriander), Aston Martins and the smell of fresh coffee\n";
 	$birthdayMsg .= "UID:saneRoster-" .$dateStamp. "-msg\n";
 	$birthdayMsg .= "DTSTAMP:" . $dateStamp . "\n";
 	
